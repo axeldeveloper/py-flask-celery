@@ -6,13 +6,16 @@ from flask import Flask, jsonify
 # import time
 
 app = Flask(__name__)
-#app.register_blueprint(simple_page)
+# app.register_blueprint(simple_page)
 
-#redis_connection = redis.Redis(host='localhost', port=6379, db=0)
+# redis_connection = redis.Redis(host='localhost', port=6379, db=0)
 
 @app.route("/")
 def hello():
     return "Hello World!"
+@app.route("/v1")
+def v1():
+    return "<h1 style='color:blue'>Hello There!</h1>"
 
 # @app.route('/teste1')
 # def count_visit():
@@ -47,5 +50,5 @@ def hello():
 
 
 
-if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000, debug=False)
+#if __name__ == '__main__':
+#    app.run(host="0.0.0.0", port=5002, debug=False)

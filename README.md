@@ -1,46 +1,53 @@
 # Project
-    - python
+    - python 3.11.4
     - celery
+    - alwaysdata
+    - flask
 
-
-# install dependencies
+# Install dependencies
     - python3 pip install -r .\requirements.txt
 
 
 # Create virtual env
-```powershell
-$ python3 -m venv .venv
-$ .venv\Scripts\activate
+```sh
+$ python3 -m venv .venv311
+# window 
+$ ./venv311/Scripts/activate/Activate.ps1
+$ ./venv311/Scripts/activate
+
+# linux 
+source ./venv311/bin/activate
+source venv311/bin/activate
+
 $ pip install -r requirements.txt
 
 $ cd my-project
 
 $ virtualenv --python C:\Path\To\Python\python.exe venv
-$ virtualenv -p  C:\Python39\ venv39
-$ virtualenv --python C:\Python39\python.exe venv39
-$ .\venv\Scripts\activate
+$ virtualenv -p  C:\Python311\ venv311
+$ virtualenv --python C:\Python311\python.exe venv311
+$ .\venv311\Scripts\activate
 
-$ .\venv39\Scripts\activate
+$ .\venv311\Scripts\activate
 $ & e:/Desenvolvimento/python/Em_py3/rq-test/venv39/Scripts/Activate.ps1
 
 
 ```
-
+# run 
+- uvicorn main:app --port 8100 --host '::' --proxy-headers --forwarded-allow-ips "::1"
+- gunicorn --bind 0.0.0.0:5002 wsgi:app
 
 # Start worker instance.
 
-  Examples
-  --------
+$ celery --app=proj worker -l INFO
 
-  $ celery --app=proj worker -l INFO
+$ celery -A proj worker -l INFO -Q hipri,lopri
 
-  $ celery -A proj worker -l INFO -Q hipri,lopri
+$ celery -A proj worker --concurrency=4
 
-  $ celery -A proj worker --concurrency=4
+$ celery -A proj worker --concurrency=1000 -P eventlet
 
-  $ celery -A proj worker --concurrency=1000 -P eventlet
-
-  $ celery worker --autoscale=10,0
+$ celery worker --autoscale=10,0
 
 
 # Running the Celery worker server
