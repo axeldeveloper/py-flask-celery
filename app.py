@@ -1,12 +1,13 @@
-from flask import Flask, jsonify
-# from simple_page import simple_page
+from flask import Flask, jsonify, render_template
+from simple_page import simple_page
+
 # from celery.result import AsyncResult
 # import tasks
 # import redis
 # import time
 
 app = Flask(__name__)
-# app.register_blueprint(simple_page)
+app.register_blueprint(simple_page)
 
 # redis_connection = redis.Redis(host='localhost', port=6379, db=0)
 
@@ -16,6 +17,9 @@ def hello():
 @app.route("/v1")
 def v1():
     return "<h1 style='color:blue'>Hello There!</h1>"
+
+
+
 
 # @app.route('/teste1')
 # def count_visit():
