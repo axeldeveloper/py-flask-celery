@@ -32,6 +32,31 @@ $ .\venv311\Scripts\activate
 $ & e:/Desenvolvimento/python/Em_py3/rq-test/venv39/Scripts/Activate.ps1
 
 
+# migration
+flask db init  
+flask db migrate -m "Initial migration."
+flask db upgrade 
+ 
+# postgres
+pip install psycopg2-binary
+
+#                                                                                                                                                                                             
+# Conteudo do arquivo `wsgi.py`                                                                                                                                                               
+#                                                                                                                                                                                             
+import os                                                                                                                                                                                     
+import sys                                                                                                                                                                                    
+                                                                                                                                                                                              
+# sys.path.insert(0, "/home/seu-usuario/projetos/flask-test")                                                                                                                                 
+# sys.path.insert(0, "E:/Desenvolvimento\python/py_flask_celery/")                                                                                                                            
+# sys.path.append(os.path.dirname(__file__))                                                                                                                                                  
+                                                                                                                                                                                              
+from app import app as application                                                                                                                                                            
+                                                                                                                                                                                              
+if __name__ == "__main__":                                                                                                                                                                    
+    # app.run(host="0.0.0.0", port=5002, debug=False)                                                                                                                                         
+    application.run(host="0.0.0.0", debug=False)
+
+
 ```
 # run 
 - uvicorn main:app --port 8100 --host '::' --proxy-headers --forwarded-allow-ips "::1"

@@ -1,24 +1,36 @@
-from flask import Flask, jsonify, render_template
-from simple_page import simple_page
+import os
+from flask import Flask
+from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
+from route.simple_page import simple
+from setting.config import DevelopmentConfig
+from worker.service_rabbitmq import ServiceRabbitmq
 
 # from celery.result import AsyncResult
 # import tasks
 # import redis
 # import time
-
 app = Flask(__name__)
-app.register_blueprint(simple_page)
+app.config.from_object(DevelopmentConfig)
+#app.config.from_object(os.environ['APP_SETTINGS'])
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+app.register_blueprint(simple)
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+#migrate = Migrate(app, db, command='migrate')
+from models.all_type import AllTypes
 
 # redis_connection = redis.Redis(host='localhost', port=6379, db=0)
 
 @app.route("/")
 def hello():
-    return "Hello World!"
+    return "<h1 style='color:blue'> Todo poderoso python !</h1>"
 @app.route("/v1")
 def v1():
+    print(">>>>>" * 20)
+    ServiceRabbitmq().publisher("Hello RabbitMQ!")
+    print("ok")
     return "<h1 style='color:blue'>Hello There!</h1>"
-
-
 
 
 # @app.route('/teste1')

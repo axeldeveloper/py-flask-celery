@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 import time
 from redis import Redis
-from config import Config
+from setting import Config
 import tasks
 from celery import Celery
 from celery.schedules import crontab
