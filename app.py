@@ -1,37 +1,50 @@
 import os
-from flask import Flask
+from flask import Flask, jsonify
 from flask_migrate import Migrate
-from flask_sqlalchemy import SQLAlchemy
+from models.database import db
+from route.api_all_type import ApiAllType, ApiAllTypeParam
 from route.simple_page import simple
 from setting.config import DevelopmentConfig
 from worker.service_rabbitmq import ServiceRabbitmq
+from flask_restful import Api
+from jinja2 import TemplateNotFound
+from flask_sqlalchemy import SQLAlchemy
 
 # from celery.result import AsyncResult
 # import tasks
 # import redis
 # import time
 app = Flask(__name__)
+# db = SQLAlchemy(app)
+api = Api(app)
 app.config.from_object(DevelopmentConfig)
-#app.config.from_object(os.environ['APP_SETTINGS'])
+# app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-app.register_blueprint(simple)
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
-#migrate = Migrate(app, db, command='migrate')
-from models.all_type import AllTypes
+app.register_blueprint(simple, url_prefix='/api')
+api.add_resource(ApiAllType, '/api/types/')
+api.add_resource(ApiAllTypeParam, '/api/type/<int:id>')
 
+db.init_app(app)
+migrate = Migrate(app, db)
+# migrate = Migrate(app, db, command='migrate')
 # redis_connection = redis.Redis(host='localhost', port=6379, db=0)
 
 @app.route("/")
 def hello():
     return "<h1 style='color:blue'> Todo poderoso python !</h1>"
+
+@app.route('/health')
+def health():
+    msg = os.environ.get('FLASK_ENV')
+    return jsonify({"status": "success", "message": msg })
+
+
 @app.route("/v1")
 def v1():
     print(">>>>>" * 20)
     ServiceRabbitmq().publisher("Hello RabbitMQ!")
     print("ok")
     return "<h1 style='color:blue'>Hello There!</h1>"
-
 
 # @app.route('/teste1')
 # def count_visit():
@@ -65,6 +78,5 @@ def v1():
 #
 
 
-
-#if __name__ == '__main__':
+# if __name__ == '__main__':
 #    app.run(host="0.0.0.0", port=5002, debug=False)

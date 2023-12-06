@@ -1,4 +1,5 @@
-from app import db
+from models.database import db
+
 
 class AllTypes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -8,6 +9,10 @@ class AllTypes(db.Model):
     disable = db.Column(db.Boolean)
     globals = db.Column(db.Boolean)
 
-    #t.references: customer, foreign_key: true
-    #t.references: company, foreign_key: true
-    #t.timestamps
+    # t.references: customer, foreign_key: true
+    # t.references: company, foreign_key: true
+
+    # from datetime import datetime
+    # timestamp = db.Column(
+    #     db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
+    # )

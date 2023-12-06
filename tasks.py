@@ -13,9 +13,6 @@ CELERY_BROKER_URL = "redis://localhost:6379/0"
 CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
 CELERY_TASK_TRACK_STARTED = True
 
-
-
-
 #app = Celery(__name__)
 #app.config_from_object(Config)
 task_ignore_result=False
