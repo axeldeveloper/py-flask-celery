@@ -1,4 +1,0 @@
-API_URL=http://localhost:5002
-DATABASE_URL=postgresql://mss:mss766312@postgresql-mss.alwaysdata.net/mss_pg_db
-FLASK_ENV=development
-APP_SETTINGS="config.DevelopmentConfig"

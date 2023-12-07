@@ -1,7 +1,8 @@
 from flask import request
-from flask_restful import Resource
+from flask_restful import Resource, abort
 
 from services.service_all_types import ServiceAllTypes
+from setting.standar_error import StandarError
 
 
 class ApiAllType(Resource):
@@ -11,12 +12,18 @@ class ApiAllType(Resource):
         return rows
 
     def post(self):
-        data = request.get_json()
-        response, data = ServiceAllTypes().create(data)
-        if response:
-            return data, 201  # 201 Created
-        else:
-            return {'message': "Unprocessable Entity"}, 422, {'Etag': 'Unprocessable Entity'}
+        try:
+            data = request.get_json()
+            response, data = ServiceAllTypes().create(data)
+            if response:
+                return data, 201  # 201 Created
+            else:
+                return {'message': "Unprocessable Entity"}, 422, {'Etag': 'Unprocessable Entity'}
+        except StandarError as e:
+            abort(404)
+
+
+
 
 
 class ApiAllTypeParam(Resource):

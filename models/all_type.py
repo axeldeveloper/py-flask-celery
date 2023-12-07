@@ -1,3 +1,5 @@
+from sqlalchemy.orm import validates
+
 from models.database import db
 
 
@@ -16,3 +18,9 @@ class AllTypes(db.Model):
     # timestamp = db.Column(
     #     db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
     # )
+
+    @validates('type_name')
+    def validate_username(self, key, value):
+        if not value:
+            raise ValueError("Must have a type_name")
+        return value

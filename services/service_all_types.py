@@ -30,7 +30,9 @@ class ServiceAllTypes:
             db.session.add(new_user)
             db.session.commit()
             return True, self.schema.dump(data)
-        except exc.SQLAlchemyError as e:
+
+        except(exc.SQLAlchemyError, ValueError, ZeroDivisionError, KeyError) as e:
+            print(">>>>" * 20)
             print(e)
             return False, {'message': 'Error create', 'trace': e}
 
@@ -41,12 +43,10 @@ class ServiceAllTypes:
                 row.name = data['name']
                 row.description = data['description']
                 db.session.commit()
-                load_data = self.schema.load(data, session=db.session)
-                print(">>>>>" * 20)
-                print(load_data)
+                # load_data = self.schema.load(data, session=db.session)
                 return True, self.schema.dump(data)
             return {'message': 'AllTypes not found'}
-        except exc.SQLAlchemyError as e:
+        except(exc.SQLAlchemyError, ValueError, ZeroDivisionError, KeyError) as e:
             return False, {'message': 'Error update', 'trace': e}
 
     def delete(self, id):
@@ -55,5 +55,5 @@ class ServiceAllTypes:
             db.session.delete(row)
             db.session.commit()
             return True, self.schema.dump(row)
-        except exc.SQLAlchemyError as e:
+        except(exc.SQLAlchemyError, ValueError, ZeroDivisionError, KeyError) as e:
             return False, {'message': 'Error delete AllTypes not found', 'trace': e}

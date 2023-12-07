@@ -70,7 +70,7 @@ flask run --debug
 - gunicorn --bind 0.0.0.0:5002 wsgi:app
 
 # Start worker instance.
-
+celery worker -A celery_worker.celery --loglevel=INFO -Q cache
 $ celery --app=proj worker -l INFO
 
 $ celery -A proj worker -l INFO -Q hipri,lopri
@@ -86,19 +86,21 @@ $ celery worker --autoscale=10,0
 
 ```powershell
 # run worker
-$ celery -A tasks worker --loglevel=INFO
-$ celery -A tasks worker -l INFO -E
+$ celery --app worker.tasks.celery_app worker --loglevel=info
+$ celery -A worker.tasks.celery_app worker --loglevel=INFO
+$ celery -A worker.tasks.celery_app worker -l INFO -E
+$ celery -A worker.tasks.celery_app worker --without-heartbeat --without-gossip --without-mingle
+# tasks = app clery name
 $ celery -A tasks worker -l debug
 
-celery -A tasks worker --without-heartbeat --without-gossip --without-mingle
-
-celery worker -A tasks -Q default --concurrency=4
+celery --app worker.tasks.celery_app worker -Q default --concurrency=4
 
 celery -A tasks worker -l INFO -Q queue1
 
 # run monitor flower
-$ celery -A tasks flower --port=5001
-
+$ celery -A worker.tasks.celery_app flower --port=5555
+$ celery --app worker.tasks.celery_app flower --port=5555 -Q default --concurrency=4
+$ celery --app worker.tasks.celery_app flower --port=5555 -Q default
 $ celery -A tasks flower --basic-auth="user1:foo,user2:bar" --port=5001
 
 ```
