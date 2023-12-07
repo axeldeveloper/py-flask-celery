@@ -5,10 +5,10 @@ from models.database import db
 from route.api_all_type import ApiAllType, ApiAllTypeParam
 from route.api_worker import wrk
 from setting.config import DevelopmentConfig
-from worker import tasks
 from worker.service_rabbitmq import ServiceRabbitmq
 from flask_restful import Api
 from worker.tasks import celery_app
+from worker import tasks
 
 app = Flask(__name__)
 # db = SQLAlchemy(app)
@@ -34,7 +34,7 @@ def health():
 
 
 @app.route("/publisher")
-def v1():
+def publisher():
     print(">>>>>" * 20)
     ServiceRabbitmq().publisher("Hello RabbitMQ!")
     print("ok")

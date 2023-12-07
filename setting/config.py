@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+from kombu import Queue, Exchange
 
 load_dotenv()
 
@@ -20,12 +21,20 @@ class Config(object):
     PROJECT_DIR = os.path.dirname(MODULE_DIR)
     CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'redis://localhost:6379/0')
     CELERY_RESULT_BACKEND = os.environ.get('CELERY_BACKEND', 'redis://localhost:6379/1')
-    CELERY_ACCEPT_CONTENT = ['json', 'yaml'] # ['application/json']
-    # CELERY_ACCEPT_CONTENT = ['application/json']
+    #CELERY_ACCEPT_CONTENT = ['json', 'yaml'] # ['application/json']
+    CELERY_ACCEPT_CONTENT = ['application/json']
     CELERY_TASK_SERIALIZER = 'json'
     CELERY_RESULT_SERIALIZER = 'json'
     CELERY_IMPORTS = ('tasks',)
+    CELERY_BROKER_HEARTBEAT = 0
+    CELERY_BROKER_POOL_LIMIT = 1
+    CELERY_BROKER_CONNECTION_TIMEOUT = 10
     CELERY_WORKER_HIJACK_ROOT_LOGGER = False
+    CELERY_DEFAULT_QUEUE = 'myapp'
+    CELERY_QUEUES = (
+        Queue('myapp', Exchange('default'), routing_key='default'),
+    )
+
 
     # redis
     REDIS_HOST = "0.0.0.0"

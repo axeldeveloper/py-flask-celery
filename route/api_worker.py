@@ -6,11 +6,12 @@ from services.service_all_types import ServiceAllTypes
 from setting.standar_error import StandarError
 from worker.tasks import celery_app
 
-wrk = Blueprint('simple_page', __name__)
+wrk = Blueprint('api_worker', __name__)
 
 @wrk.route('/sum')
 def sum_value():
     rest = celery_app.sum_value.delay(5, 4)
+    rest1 =  celery_app.sum_value.apply_async(args=[5,4], countdown=60)
     return jsonify({"status": rest.state, "message": 'rest', "result_id": rest.id}), 200
 
 # @app.route('/teste2')

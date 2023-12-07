@@ -70,7 +70,8 @@ flask run --debug
 - gunicorn --bind 0.0.0.0:5002 wsgi:app
 
 # Start worker instance.
-celery worker -A celery_worker.celery --loglevel=INFO -Q cache
+$ celery worker -A celery_worker.celery --loglevel=INFO -Q cache
+
 $ celery --app=proj worker -l INFO
 
 $ celery -A proj worker -l INFO -Q hipri,lopri
@@ -93,9 +94,10 @@ $ celery -A worker.tasks.celery_app worker --without-heartbeat --without-gossip 
 # tasks = app clery name
 $ celery -A tasks worker -l debug
 
-celery --app worker.tasks.celery_app worker -Q default --concurrency=4
+# Queue
+$ celery --app worker.tasks.celery_app worker -Q default --concurrency=4
 
-celery -A tasks worker -l INFO -Q queue1
+$ celery -A tasks worker -l INFO -Q queue1
 
 # run monitor flower
 $ celery -A worker.tasks.celery_app flower --port=5555
@@ -103,7 +105,13 @@ $ celery --app worker.tasks.celery_app flower --port=5555 -Q default --concurren
 $ celery --app worker.tasks.celery_app flower --port=5555 -Q default
 $ celery -A tasks flower --basic-auth="user1:foo,user2:bar" --port=5001
 
+# run celery beat for periodic tasks
+$ celery -A src.worker:celery beat --loglevel=INFO
+
+$ celery -A worker.tasks.celery_app beat --loglevel=INFO
+
 ```
+
 
 - https://www.revsys.com/tidbits/celery-and-django-and-docker-oh-my/
 
