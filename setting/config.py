@@ -12,8 +12,7 @@ class Config(object):
     TESTING = False
     CSRF_ENABLED = True
     SECRET_KEY = 'a2%mnuo4p+i3v=yr&x2@l(fnbbn4o3az8nep$fyu^k1ljnj'
-    DATABASE_URL = "postgresql://mss:mss766312@postgresql-mss.alwaysdata.net/mss_pg_db"
-    #DATABASE_URL = "postgresql://postgres:postgres@localhost/mss_pg_db"
+    DATABASE_URL = "postgresql://postgres:postgres@localhost/mss_pg_db"
     #SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
     SQLALCHEMY_DATABASE_URI = DATABASE_URL
     # BROKER_URL = 'redis://localhost:6379/0'
