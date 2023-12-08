@@ -1,6 +1,5 @@
 from worker.rabbit.publisher import Publisher
 
-
 class ServiceRabbitmq:
 
     def __int__(self, options=dict):
