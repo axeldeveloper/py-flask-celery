@@ -1,5 +1,4 @@
 from sqlalchemy.orm import validates
-
 from models.database import db
 
 

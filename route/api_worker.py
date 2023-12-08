@@ -10,9 +10,15 @@ wrk = Blueprint('api_worker', __name__)
 
 @wrk.route('/sum')
 def sum_value():
-    rest = celery_app.sum_value.delay(5, 4)
-    rest1 =  celery_app.sum_value.apply_async(args=[5,4], countdown=60)
-    return jsonify({"status": rest.state, "message": 'rest', "result_id": rest.id}), 200
+    # result = celery_app.sum_value.delay(5, 4)
+    result = celery_app.sum_value.apply_async(args=[5,5], countdown=60)
+    while not result.ready():
+        pass
+    print(result.get())
+    return jsonify({
+        "status": result.state,
+        "message": result.get(),
+        "result_id": result.id}), 200
 
 # @app.route('/teste2')
 # def teste2():

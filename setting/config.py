@@ -14,7 +14,7 @@ class Config(object):
     CSRF_ENABLED = True
     SECRET_KEY = 'a2%mnuo4p+i3v=yr&x2@l(fnbbn4o3az8nep$fyu^k1ljnj'
     DATABASE_URL = "postgresql://postgres:postgres@localhost/mss_pg_db"
-    #SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
+    # SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
     SQLALCHEMY_DATABASE_URI = DATABASE_URL
     # BROKER_URL = 'redis://localhost:6379/0'
     MODULE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -31,6 +31,7 @@ class Config(object):
     CELERY_BROKER_CONNECTION_TIMEOUT = 10
     CELERY_WORKER_HIJACK_ROOT_LOGGER = False
     CELERY_DEFAULT_QUEUE = 'myapp'
+    CELERY_TASK_TRACK_STARTED = True
     CELERY_QUEUES = (
         Queue('myapp', Exchange('default'), routing_key='default'),
     )

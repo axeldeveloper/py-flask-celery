@@ -20,7 +20,9 @@ app.register_blueprint(wrk, url_prefix='/task/')
 api.add_resource(ApiAllType, '/api/types/')
 api.add_resource(ApiAllTypeParam, '/api/type/<int:id>')
 
-db.init_app(app)
+with app.app_context():
+    #init_db()
+    db.init_app(app)
 migrate = Migrate(app, db)
 
 @app.route("/")
