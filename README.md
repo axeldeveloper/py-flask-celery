@@ -64,47 +64,41 @@ if __name__ == "__main__":
 
 ```sh
 # run
-flask run --debug
+$ flask run --debug
+$ uvicorn main:app --port 8100 --host '::' --proxy-headers --forwarded-allow-ips "::1"
+$ gunicorn --bind 0.0.0.0:5002 wsgi:app
 
-- uvicorn main:app --port 8100 --host '::' --proxy-headers --forwarded-allow-ips "::1"
-- gunicorn --bind 0.0.0.0:5002 wsgi:app
-
-# Start worker instance.
-$ celery worker -A celery_worker.celery --loglevel=INFO -Q cache
-
-$ celery --app=proj worker -l INFO
-
-$ celery -A proj worker -l INFO -Q hipri,lopri
-
-$ celery -A proj worker --concurrency=4
-
-$ celery -A proj worker --concurrency=1000 -P eventlet
-
-$ celery worker --autoscale=10,0
-
+```
 
 # Running the Celery worker server
 
-```powershell
-# run worker
-$ celery --app worker.tasks.celery_app worker --loglevel=info
-$ celery -A worker.tasks.celery_app worker --loglevel=INFO
-$ celery -A worker.tasks.celery_app worker -l INFO -E
-$ celery -A worker.tasks.celery_app worker --without-heartbeat --without-gossip --without-mingle
-# tasks = app clery name
-$ celery -A tasks worker -l debug
+```sh
+
+# Worker
+# Start worker instance.
+
+$ celery --app app.celery_ap worker -l INFO
+$ celery --app app.celery_ap worker --concurrency=4
+$ celery --app app.celery_ap worker --concurrency=1000 -P eventlet
+$ celery --app worker.tasks.celery_app worker -l INFO -E
+$ celery --app worker.tasks.celery_app worker --without-heartbeat --without-gossip --without-mingle
 
 # Queue
 $ celery --app worker.tasks.celery_app worker -Q default --concurrency=4
-
-$ celery -A tasks worker -l INFO -Q queue1
+$ celery --app app.celery_app worker --loglevel=INFO -Q cache
+$ celery --app app.celery_ap worker -l INFO -Q hipri,lopri
 
 # run monitor flower
-$ celery -A worker.tasks.celery_app flower --port=5555
+$ celery --app app.celery_ap flower --port=5555  -l INFO -E
+$ celery --app worker.tasks.celery_app flower --port=5555
 $ celery --app worker.tasks.celery_app flower --port=5555 -Q default --concurrency=4
 $ celery --app worker.tasks.celery_app flower --port=5555 -Q default
 $ celery -A tasks flower --basic-auth="user1:foo,user2:bar" --port=5001
 
+
+
+
+$ celery -A app.celery_app beat --loglevel=INFO
 # run celery beat for periodic tasks
 $ celery -A src.worker:celery beat --loglevel=INFO
 

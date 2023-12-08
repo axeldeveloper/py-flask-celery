@@ -1,25 +1,34 @@
 #!/usr/bin/env python
+import time
+
 from celery import current_app
-from celery.schedules import crontab
 from celery.utils.log import get_task_logger
+from sqlalchemy.exc import NoResultFound
+from services.service_all_types import ServiceAllTypes
+from setting.config import DevelopmentConfig
+from celery.schedules import crontab
 
 logger = get_task_logger(__name__)
+task_ignore_result = False
 
-# current_app.conf.beat_schedule = {
+# current_app.conf.update(DevelopmentConfig)
+#current_app.config['DISABLED '] = False
+#current_app.conf['DISABLED'] = True
+# current_app.conf.CELERYBEAT_SCHEDULE = {
 #     'periodic_task-every-minute': {
 #         'task': 'check_customer',
 #         'schedule': crontab(minute="*"),
 #         'args': (1,)
 #     },
 # }
-current_app.conf.CELERYBEAT_SCHEDULE = {
-    'periodic_task-every-minute': {
-        'task': 'check_customer',
-        'schedule': crontab(minute="*"),
-        'args': (1,)
-    },
-}
 
+# current_app.conf['CELERYBEAT_SCHEDULE'] = {
+#     'periodic_task-every-minute': {
+#         'task': 'check_customer',
+#         'schedule': crontab(minute="*"),
+#         'args': (1,)
+#     },
+# }
 
 @current_app.task(name="substract_value", default_retry_delay=2 * 60, max_retries=2, rate_limit=5)
 def substract_value(x, y):
@@ -43,4 +52,5 @@ def get_customer_type(u_id):
         # return json.dumps(row.name)
         # return json.dumps(s.as_dict())
     except (Exception, ValueError, NoResultFound) as exc:
-        raise check_customer_type.retry(exc=exc)
+        raise get_customer_type.retry(exc=exc)
+

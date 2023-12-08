@@ -32,6 +32,8 @@ class Config(object):
     CELERY_WORKER_HIJACK_ROOT_LOGGER = False
     CELERY_DEFAULT_QUEUE = 'myapp'
     CELERY_TASK_TRACK_STARTED = True
+    CELERY_TASK_RESULT_EXPIRES = 30
+    CELERY_TIMEZONE = 'UTC'
     CELERY_QUEUES = (
         Queue('myapp', Exchange('default'), routing_key='default'),
     )

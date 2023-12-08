@@ -20,10 +20,10 @@ def sum_value():
         "message": result.get(),
         "result_id": result.id}), 200
 
-@wrk.route('/sum1')
-def sum_value1():
-    # result = celery_app.sum_value.delay(5, 4)
-    result = celery_worker.substract_value.apply_async(args=[5,5], countdown=60)
+@wrk.route('/substract')
+def substract():
+    result = celery_worker.substract_value.delay(5, 4)
+    #result = celery_worker.substract_value.apply_async(args=[5,5], countdown=60)
     # while not result.ready():
     #     pass
     # print(result.get())
