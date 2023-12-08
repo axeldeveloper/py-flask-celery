@@ -2,6 +2,7 @@
 from celery import current_app
 from celery.schedules import crontab
 from celery.utils.log import get_task_logger
+
 logger = get_task_logger(__name__)
 
 # current_app.conf.beat_schedule = {
@@ -23,6 +24,7 @@ current_app.conf.CELERYBEAT_SCHEDULE = {
 @current_app.task(name="substract_value", default_retry_delay=2 * 60, max_retries=2, rate_limit=5)
 def substract_value(x, y):
     return x + y
+
 
 @current_app.task(name="get_customer_type")
 def get_customer_type(u_id):
