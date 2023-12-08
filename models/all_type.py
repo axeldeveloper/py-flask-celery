@@ -1,6 +1,6 @@
 from sqlalchemy.orm import validates
 from models.database import db
-
+from datetime import datetime
 
 class AllTypes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -13,10 +13,12 @@ class AllTypes(db.Model):
     # t.references: customer, foreign_key: true
     # t.references: company, foreign_key: true
 
-    # from datetime import datetime
-    # timestamp = db.Column(
-    #     db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
-    # )
+    create_at = db.Column(
+         db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
+    )
+
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
     @validates('type_name')
     def validate_username(self, key, value):

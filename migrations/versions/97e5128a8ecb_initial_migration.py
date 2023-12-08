@@ -1,4 +1,4 @@
-"""Initial migration.
+"""Initial bootstrap.
 
 Revision ID: 97e5128a8ecb
 Revises: 

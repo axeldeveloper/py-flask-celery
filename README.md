@@ -35,7 +35,7 @@ $ .\venv311\Scripts\activate
 # install packages
 $ pip install -r requirements.txt
 
-# migration
+# bootstrap
 flask db init
 flask db migrate -m "Initial migration."
 flask db upgrade

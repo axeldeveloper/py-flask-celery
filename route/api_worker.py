@@ -4,7 +4,7 @@ from os import environ
 
 from services.service_all_types import ServiceAllTypes
 from setting.standar_error import StandarError
-from worker.tasks import celery_app
+from worker.tasks import celery_app, celery_worker
 
 wrk = Blueprint('api_worker', __name__)
 
@@ -15,6 +15,18 @@ def sum_value():
     while not result.ready():
         pass
     print(result.get())
+    return jsonify({
+        "status": result.state,
+        "message": result.get(),
+        "result_id": result.id}), 200
+
+@wrk.route('/sum1')
+def sum_value1():
+    # result = celery_app.sum_value.delay(5, 4)
+    result = celery_worker.substract_value.apply_async(args=[5,5], countdown=60)
+    # while not result.ready():
+    #     pass
+    # print(result.get())
     return jsonify({
         "status": result.state,
         "message": result.get(),
