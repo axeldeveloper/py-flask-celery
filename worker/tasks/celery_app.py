@@ -12,11 +12,8 @@
 # from celery.schedules import crontab
 # from celery.signals import task_revoked
 # from sqlalchemy.exc import NoResultFound
-#
-#
 # from models.all_type import AllTypes
 # from models.orm_session import db_session
-# from services.service_all_types import ServiceAllTypes
 #
 #
 # # Celery settings
@@ -32,24 +29,14 @@
 # celery.conf.beat_schedule = {}
 #
 # # CELERYBEAT_SCHEDULE
-# celery.conf.CELERYBEAT_SCHEDULE = {
-#     # 'call-every-30-seconds': {
-#     #     'task': 'task_backend',
-#     #     'schedule': 30.0,
-#     #     'args': ("call-every-30-seconds",)
-#     # },
-#     # "call-birthday-task": {
-#     #     "task": "task_backend",
-#     #     "schedule": crontab(minute="*"),
-#     #     'args': ("call-birthday-task",)
-#     # },
-#     # Executes every minute
-#     'periodic_task-every-minute': {
-#         'task': 'check_customer',
-#         'schedule': crontab(minute="*"),
-#         'args': (1,)
-#     },
-# }
+# # celery.conf.CELERYBEAT_SCHEDULE = {
+# #     # Executes every minute
+# #     'periodic_task-every-minute': {
+# #         'task': 'check_customer',
+# #         'schedule': crontab(minute="*"),
+# #         'args': (1,)
+# #     },
+# # }
 #
 #
 # class SqlAlchemyTask(Task):
@@ -57,46 +44,29 @@
 #     _db = None
 #     _mandrill = None
 #
-#     @property
-#     def db(self):
-#         if self._db is not None:
-#             return self._db
-#         self._db = db_session
-#         # self._db = psycopg2.connect(
-#         #     host=self.app.conf.POSTGRES_HOST,
-#         #     port=self.app.conf.POSTGRES_PORT,
-#         #     dbname=self.app.conf.POSTGRES_DBNAME,
-#         #     user=self.app.conf.POSTGRES_USER,
-#         #     password=self.app.conf.POSTGRES_PASSWORD,
-#         #     cursor_factory=NamedTupleCursor,
-#         #     connection_factory=Connection,
-#         # )
-#         return self._db
+#     # @property
+#     # def db(self):
+#     #     if self._db is not None:
+#     #         return self._db
+#     #     self._db = psycopg2.connect(
+#     #         host=self.app.conf.POSTGRES_HOST,
+#     #         port=self.app.conf.POSTGRES_PORT,
+#     #         dbname=self.app.conf.POSTGRES_DBNAME,
+#     #         user=self.app.conf.POSTGRES_USER,
+#     #         password=self.app.conf.POSTGRES_PASSWORD,
+#     #         cursor_factory=NamedTupleCursor,
+#     #         connection_factory=Connection,
+#     #     )
+#     #     return self._db
 #
 #     def after_return(self, status, retval, task_id, args, kwargs, einfo):
 #         """
 #         Clean up database after the task is finished.
 #
 #         """
-#         db_session.remove()
+#         # db_session.remove()
 #         # self._db.close()
 #         self._db = None
-#
-#
-# def initialize_session():
-#     # engine = create_engine(DATABASE_URL
-#     #     , convert_unicode = True
-#     #     ,pool_recycle = 3600
-#     #     ,pool_size = 10
-#     # )
-#     # # Session.configure(bind=some_engine)
-#     # # create a configured "Session" class
-#     # #Session = sessionmaker(bind=engine)
-#     # session = scoped_session(sessionmaker(
-#     #     autocommit=False, autoflush=False, bind=engine))
-#     # create a Session
-#     # session = Session()
-#     logger.info("Task is running ...................................")
 #
 #
 # @celery.on_after_configure.connect
@@ -135,8 +105,7 @@
 #     try:
 #         logger.debug("Starting task")
 #         # row = db_session.query(AllTypes).filter(AllTypes.id == u_id).one()
-#         # row = db_session.query(AllTypes).get(u_id)
-#         row = ServiceAllTypes().findOne(u_id)
+#         row = db_session.query(AllTypes).get(u_id)
 #         time.sleep(1)
 #         if row.type_name == "financeiro":
 #             logger.info("Task completed")
@@ -149,7 +118,4 @@
 #     except (Exception, ValueError, NoResultFound) as exc:
 #         raise check_customer_type.retry(exc=exc)
 #
-# #
-# # def t_status(id):
-# #     c = app.AsyncResult(id)
-# #     return c
+#

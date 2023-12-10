@@ -1,106 +1,89 @@
-from celery.schedules import crontab
+import os
 
+from celery.schedules import crontab
+from flask import Flask
+from flask_restful import Api
+
+from route.api_all_type import ApiAllType, ApiAllTypeParam
 from route.api_worker import wrk
 from setting.config import DevelopmentConfig
 from models.database import db
 from flask_migrate import Migrate
-from celery import Celery
-import os
-
-migrate = Migrate()
+from celery import Celery, Task
 
 BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'redis://localhost:6379/0')
-RESULT_BACKEND = os.environ.get('CELERY_BACKEND', 'redis://localhost:6379/1')
+RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND', 'redis://localhost:6379/0')
 DATABASE_URL = os.environ.get('DATABASE_URL')
 
 
 class CeleryConfig:
     # CELERY_IMPORTS = ('proj.tasks')
+    CELERY_RESULT_EXTENDED = True
     CELERY_TASK_RESULT_EXPIRES = 30
-    CELERY_ACCEPT_CONTENT = ['json', 'msgpack', 'yaml']
-    CELERY_TASK_SERIALIZER = 'json'
+    # CELERY_ACCEPT_CONTENT = ['json', 'msgpack', 'yaml']
+    CELERY_ACCEPT_CONTENT = ['application/json']
     CELERY_RESULT_SERIALIZER = 'json'
-    CELERY_TIMEZONE = 'Asia/Seoul'
+    CELERY_TASK_SERIALIZER = 'json'
+    # CELERY_TASK_SERIALIZER = 'json'
+    # CELERY_RESULT_SERIALIZER = 'json'
+    # CELERY_TIMEZONE = 'Asia/Seoul'
     CELERY_ENABLE_UTC = False
+    CELERY_RESULT_BACKEND = os.environ.get('CELERY_BACKEND', 'redis://localhost:6379/0')
+    CELERY_BROKER_URL = 'redis://localhost:6379/0'
+    REDIS_HOST = 'localhost'
+    REDIS_PASSWORD = ''
+    REDIS_PORT = 6379
+    REDIS_URL = 'redis://localhost:6379/0'
 
 
-CELERYBEAT_SCHEDULE = {
-    'db_connect_things': {
-        'task': 'application.lib.tasks.db_connect_things',
-        'schedule': crontab(minute=0, hour='*/12'),
-    }
-}
-
-
-def init_celery3(app):
-    celery = Celery(
-        app.import_name,
-        broker=BROKER_URL,
-        backend=RESULT_BACKEND,
-        result_extended=True,
-        config_source=app.config
+CLCFG = dict(
+        broker_url=BROKER_URL,
+        result_backend=RESULT_BACKEND,
+        task_ignore_result=True,
+        accept_content=['application/json'],
+        broker_connection_retry_on_startup=True,
+        beat_schedule={
+            "get_customer": {
+                "task": "get_customer_type",
+                "schedule": crontab("*"),
+                'args': (1,)
+            }
+        },
     )
 
-    # celery.config_from_object(app.config)
-    # celery.conf.update(app.config)
-    # celery.conf.update(CELERYBEAT_SCHEDULE)
-    class ContextTask(celery.Task):
-        # abstract = True
-        def __call__(self, *args, **kwargs):
+def celery_init_app(app: Flask) -> Celery:
+    class FlaskTask(Task):
+        def __call__(self, *args: object, **kwargs: object) -> object:
             with app.app_context():
-                # return TaskBase.__call__(self, *args, **kwargs)
                 return self.run(*args, **kwargs)
 
-    celery.Task = ContextTask
-    # celery.config_from_object(CeleryConfig)
-    # celery.conf.update(app.config)
-    return celery
+    celery_app = Celery(app.import_name,
+                        broker=BROKER_URL,
+                        backend=RESULT_BACKEND,
+                        result_extended=True, task_cls=FlaskTask)
 
-
-def init_celery(app):
-    celery = Celery(
-        app.import_name,
-        broker=BROKER_URL,
-        backend=RESULT_BACKEND,
-        result_extended=True,
-        # config_sourc=app.config
-    )
-
-    # celery.config_from_object(app.config)
-    # celery.conf.update(app.config)
-    # celery.conf.update(CELERYBEAT_SCHEDULE)
-    # TaskBase = celery.Task
-    class ContextTask(celery.Task):
-        # abstract = True
-        def __call__(self, *args, **kwargs):
-            with app.app_context():
-                # return TaskBase.__call__(self, *args, **kwargs)
-                return self.run(*args, **kwargs)
-
-    celery.Task = ContextTask
-    # celery.config_from_object(CeleryConfig)
-    # celery.conf.update(app.config)
-    return celery
-
-
-def register_blueprint(app):
-    # from proj.api import users
-    # app.register_blueprint(users.user_bp, url_prefix='/user')
-    return app
+    celery_app.config_from_object(app.config["CELERY"])
+    celery_app.set_default()
+    app.extensions["celery"] = celery_app
+    return celery_app
 
 
 def create_app():
     from flask import Flask
-    app = Flask(__name__)
+    app = Flask(__name__, static_folder='../static', template_folder='../templates')
+    api = Api(app)
     app.config.from_object(DevelopmentConfig)
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-    # app.config['CELERYBEAT_SCHEDULE'] = {}
-    celery_app = init_celery(app)
-    # celery_app.conf.update(CeleryConfig)
+    app.config.from_mapping(CELERY= CLCFG)
     with app.app_context():
         db.init_app(app)
-    # db.init_app(app)
-    migrate.init_app(app, db)
-    # migrate = Migrate(app, db)
+    # migrate = Migrate()
+    # migrate.init_app(app, db)
+    Migrate(app, db)
+
+    celery_init_app(app)
+
     app.register_blueprint(wrk, url_prefix='/task/')
-    return app, celery_app
+    api.add_resource(ApiAllType, '/api/types/')
+    api.add_resource(ApiAllTypeParam, '/api/type/<int:id>')
+    return app

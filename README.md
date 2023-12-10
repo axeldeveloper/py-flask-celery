@@ -9,6 +9,18 @@
 # Install dependencies
     - python3 pip install -r .\requirements.txt
 
+# Celery
+
+<b>Celery workers: </b> são processos de trabalho que executam tarefas 
+    independentemente umas das outras e fora do contexto do seu serviço 
+    principal.
+
+<b>Celery beat: </b> é um agendador que orquestra quando executar tarefas. 
+    Você também pode usá-lo para agendar tarefas periódicas.
+
+
+
+
 
 # Create virtual env
 ```sh
@@ -57,6 +69,7 @@ import sys
 # sys.path.insert(0, "E:/Desenvolvimento\python/py_flask_celery/")
 # sys.path.append(os.path.dirname(__file__))
 from app import app as application
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5002, debug=False)
     application.run(host="0.0.0.0", debug=False)
@@ -105,8 +118,8 @@ $ celery -A src.worker:celery beat --loglevel=INFO
 $ celery -A worker.tasks.celery_app beat --loglevel=INFO
 
 ```
-
-
+https://www.youtube.com/watch?v=ig9hbt-yKkM
+https://demo.bootstrapdash.com/hiro-agency-landing-page/index.html#services
 - https://www.revsys.com/tidbits/celery-and-django-and-docker-oh-my/
 
 https://marshmallow-sqlalchemy.readthedocs.io/en/latest/
