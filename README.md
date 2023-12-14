@@ -1,7 +1,7 @@
 # Project
     - python 3.11.4
     - celery
-    - alwaysdata
+    - alwaysdata `host free`
     - flask
     - migration
     - postgres
@@ -26,7 +26,7 @@
 ```sh
 $ cd my-project
 
-$ python3 -m venv .venv311
+$ python -m venv venv311
 # window 
 $ ./venv311/Scripts/activate/Activate.ps1
 $ ./venv311/Scripts/activate
@@ -46,6 +46,8 @@ $ .\venv311\Scripts\activate
 
 # install packages
 $ pip install -r requirements.txt
+or
+$ python -m pip install -r requirements.txt
 
 # bootstrap
 flask db init

@@ -5,14 +5,18 @@ class Publisher:
         self.exchange_name = exchange_name
         self.routing_key = routing_key
 
+        credentials = pika.PlainCredentials('admin', 'demo123')
+        
+
         # Conecta ao servidor RabbitMQ usando o protocolo AMQP
-        self.connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+        #self.connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+        self.connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost', port='5672', credentials=credentials))
         self.channel = self.connection.channel()
 
         # Conecta ao servidor RabbitMQ usando o protocolo AMQP com nome de usuário e senha
-        credentials = pika.PlainCredentials("mss", "mss766312")
-        self.connection = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq-mss.alwaysdata.net', credentials=credentials))
-        self.channel = self.connection.channel()
+        #credentials = pika.PlainCredentials("mss", "mss766312")
+        #self.connection = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq-mss.alwaysdata.net', credentials=credentials))
+        #self.channel = self.connection.channel()
 
 
 

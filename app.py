@@ -34,9 +34,5 @@ def health():
     return jsonify({"status": "success", "message": msg})
 
 
-@app.route("/publisher")
-def publisher():
-    print(">>>>>" * 20)
-    ServiceRabbitmq().publisher("Hello RabbitMQ!")
-    print("ok")
-    return "<h1 style='color:blue'>Hello There!</h1>"
+# @app.route("/publisher")
+

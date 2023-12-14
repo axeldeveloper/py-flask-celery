@@ -26,5 +26,5 @@ class Consumer:
         self.channel.start_consuming()
 
 # Exemplo de uso do Consumer
-consumer = Consumer()
-consumer.start_consuming()
+#consumer = Consumer()
+#consumer.start_consuming()

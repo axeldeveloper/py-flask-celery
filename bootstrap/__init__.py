@@ -5,6 +5,7 @@ from flask import Flask
 from flask_restful import Api
 
 from route.api_all_type import ApiAllType, ApiAllTypeParam
+from route.api_fifo import ApiFifo, ApiFifoConsumer
 from route.api_worker import wrk
 from setting.config import DevelopmentConfig
 from models.database import db
@@ -86,4 +87,9 @@ def create_app():
     app.register_blueprint(wrk, url_prefix='/task/')
     api.add_resource(ApiAllType, '/api/types/')
     api.add_resource(ApiAllTypeParam, '/api/type/<int:id>')
+    api.add_resource(ApiFifo, '/fifo/publisher/')
+    api.add_resource(ApiFifoConsumer, '/fifo/consumer/')
+
+
+
     return app
