@@ -120,8 +120,10 @@ $ celery -A src.worker:celery beat --loglevel=INFO
 $ celery -A worker.tasks.celery_app beat --loglevel=INFO
 
 ```
-https://www.youtube.com/watch?v=ig9hbt-yKkM
-https://demo.bootstrapdash.com/hiro-agency-landing-page/index.html#services
+- https://www.youtube.com/watch?v=ig9hbt-yKkM
+
+- https://demo.bootstrapdash.com/hiro-agency-landing-page/index.html#services
+
 - https://www.revsys.com/tidbits/celery-and-django-and-docker-oh-my/
 
-https://marshmallow-sqlalchemy.readthedocs.io/en/latest/
+- https://marshmallow-sqlalchemy.readthedocs.io/en/latest/
