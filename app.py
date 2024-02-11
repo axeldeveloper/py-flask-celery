@@ -1,12 +1,11 @@
 import os
-
 from flask import jsonify, render_template, abort
 from jinja2 import TemplateNotFound
 from bootstrap import create_app
-from worker.service_rabbitmq import ServiceRabbitmq
-from celery.schedules import crontab
 
 app = create_app()
+
+
 # app, celery_app = create_app()
 # celery_app.conf.beat_schedule = {
 #     # Executes every Monday morning at 7:30 a.m.

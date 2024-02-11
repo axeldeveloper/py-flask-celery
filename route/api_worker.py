@@ -12,12 +12,10 @@ def uppercase():
     #result = celery_worker.substract_value.delay(5, 4)
     #result = celery_app.sum_value.apply_async(args=[5, 5], countdown=60)
     result = celery_worker.TextTransformer().uppercase.apply_async(args=["clery"], countdown=10)
-    # result = TextTransformer().add.delay(total=10)
     while not result.ready():
          pass
     print(result.get())
     return jsonify({"status": result.state, "message": result.get(), "result_id": result.id}), 200
-    #return jsonify({"status": "ok"}), 200
 
 @wrk.get("/status/<uuid>")
 def task_result(uuid: str) -> tuple[Response, int]:

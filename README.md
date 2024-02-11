@@ -11,11 +11,11 @@
 
 # Celery
 
-<b>Celery workers: </b> são processos de trabalho que executam tarefas 
-    independentemente umas das outras e fora do contexto do seu serviço 
+<b>Celery workers: </b> são processos de trabalho que executam tarefas
+    independentemente umas das outras e fora do contexto do seu serviço
     principal.
 
-<b>Celery beat: </b> é um agendador que orquestra quando executar tarefas. 
+<b>Celery beat: </b> é um agendador que orquestra quando executar tarefas.
     Você também pode usá-lo para agendar tarefas periódicas.
 
 

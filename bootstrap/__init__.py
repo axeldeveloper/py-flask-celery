@@ -41,19 +41,20 @@ class CeleryConfig:
 
 
 CLCFG = dict(
-        broker_url=BROKER_URL,
-        result_backend=RESULT_BACKEND,
-        task_ignore_result=True,
-        accept_content=['application/json'],
-        broker_connection_retry_on_startup=True,
-        beat_schedule={
-            "get_customer": {
-                "task": "get_customer_type",
-                "schedule": crontab("*"),
-                'args': (1,)
-            }
-        },
-    )
+    broker_url=BROKER_URL,
+    result_backend=RESULT_BACKEND,
+    task_ignore_result=True,
+    accept_content=['application/json'],
+    broker_connection_retry_on_startup=True,
+    beat_schedule={
+        "get_customer": {
+            "task": "get_customer_type",
+            "schedule": crontab("*"),
+            'args': (1,)
+        }
+    },
+)
+
 
 def celery_init_app(app: Flask) -> Celery:
     class FlaskTask(Task):
@@ -78,8 +79,8 @@ def create_app():
     api = Api(app)
     app.config.from_object(DevelopmentConfig)
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-    
-    app.config.from_mapping(CELERY= CLCFG)
+
+    app.config.from_mapping(CELERY=CLCFG)
     with app.app_context():
         db.init_app(app)
     # migrate = Migrate()
@@ -87,16 +88,15 @@ def create_app():
     Migrate(app, db)
 
     celery_init_app(app)
-    
+
     admin = Admin(app, name='mss', template_mode='bootstrap3')
 
     app.register_blueprint(wrk, url_prefix='/task/')
-    api.add_resource(ApiAllType, '/api/types/')                 # API
-    api.add_resource(ApiAllTypeParam, '/api/type/<int:id>')     # API
-    api.add_resource(ApiFifo, '/fifo/publisher/')               # API
-    api.add_resource(ApiFifoConsumer, '/fifo/consumer/')        # API 
+    api.add_resource(ApiAllType, '/api/types/')  # API
+    api.add_resource(ApiAllTypeParam, '/api/type/<int:id>')  # API
+    api.add_resource(ApiFifo, '/fifo/publisher/')  # API
+    api.add_resource(ApiFifoConsumer, '/fifo/consumer/')  # API
 
     admin.add_view(ModelView(AllTypes, db.session))
-
 
     return app

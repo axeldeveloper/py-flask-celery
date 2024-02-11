@@ -2,6 +2,7 @@ from sqlalchemy.orm import validates
 from models.database import db
 from datetime import datetime
 
+
 class AllTypes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128))
@@ -14,7 +15,7 @@ class AllTypes(db.Model):
     # t.references: company, foreign_key: true
 
     create_at = db.Column(
-         db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
+        db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
     )
 
     def as_dict(self):
