@@ -26,3 +26,6 @@ class AllTypes(db.Model):
         if not value:
             raise ValueError("Must have a type_name")
         return value
+    
+    def __str__(self):
+        return "ID=%d, Name=%s, Globals=%d" % (self.id, self.name, self.globals)

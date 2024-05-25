@@ -3,7 +3,9 @@ from flask import jsonify, render_template, abort
 from jinja2 import TemplateNotFound
 from bootstrap import create_app
 
+
 app = create_app()
+
 
 
 # app, celery_app = create_app()

@@ -1,7 +1,7 @@
 """Initial bootstrap.
 
 Revision ID: 97e5128a8ecb
-Revises: 
+Revises:
 Create Date: 2023-12-05 20:58:08.125656
 
 """

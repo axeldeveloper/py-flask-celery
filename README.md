@@ -27,22 +27,22 @@
 $ cd my-project
 
 $ python -m venv venv311
-# window 
+
+# window
 $ ./venv311/Scripts/activate/Activate.ps1
 $ ./venv311/Scripts/activate
 $ & e:/Desenvolvimento/python/Em_py3/rq-test/venv39/Scripts/Activate.ps1
 
-# linux 
+# linux
 source ./venv311/bin/activate
-source venv311/bin/activate
 
 
-$ virtualenv --python C:\Path\To\Python\python.exe venv
+# window
 $ virtualenv -p  C:\Python311\ venv311
 $ virtualenv --python C:\Python311\python.exe venv311
-$ .\venv311\Scripts\activate
+$ .\venv311\Scripts\activate.ps1
 
-$ .\venv311\Scripts\activate
+
 
 # install packages
 $ pip install -r requirements.txt
@@ -78,6 +78,8 @@ if __name__ == "__main__":
 ```
 
 ```sh
+
+
 # run
 $ flask run --debug
 $ uvicorn main:app --port 8100 --host '::' --proxy-headers --forwarded-allow-ips "::1"

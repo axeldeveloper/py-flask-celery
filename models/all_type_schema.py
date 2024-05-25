@@ -7,4 +7,3 @@ class AllTypeSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = AllTypes
         load_instance = True
-        

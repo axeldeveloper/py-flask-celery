@@ -3,8 +3,7 @@
 #
 import os
 import sys
-# sys.path.insert(0, "/home/seu-usuario/projetos/flask-test")
-# sys.path.insert(0, "E:/Desenvolvimento\python/py_flask_celery/")
+
 sys.path.append(os.path.dirname(__file__))
 
 from app import app as application

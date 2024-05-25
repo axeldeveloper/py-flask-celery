@@ -8,7 +8,7 @@ class ApiFifo(Resource):
     def get(self):
         rows = ServiceRabbitmq().publisher("Hello RabbitMQ!")
         return rows
-    
+
 
 class ApiFifoConsumer(Resource):
 

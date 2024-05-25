@@ -14,6 +14,7 @@ from flask_migrate import Migrate
 from celery import Celery, Task
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
+from flask_seeder import FlaskSeeder
 
 BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'redis://localhost:6379/0')
 RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND', 'redis://localhost:6379/0')
@@ -83,10 +84,16 @@ def create_app():
     app.config.from_mapping(CELERY=CLCFG)
     with app.app_context():
         db.init_app(app)
-    # migrate = Migrate()
+
+    # MIGRATE
     # migrate.init_app(app, db)
     Migrate(app, db)
 
+    #SEED
+    seeder = FlaskSeeder()
+    seeder.init_app(app, db)
+
+    # CELERY
     celery_init_app(app)
 
     admin = Admin(app, name='mss', template_mode='bootstrap3')

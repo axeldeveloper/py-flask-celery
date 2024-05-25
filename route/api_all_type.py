@@ -23,9 +23,6 @@ class ApiAllType(Resource):
             abort(404)
 
 
-
-
-
 class ApiAllTypeParam(Resource):
 
     def get(self, id):

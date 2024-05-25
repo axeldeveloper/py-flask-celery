@@ -6,7 +6,7 @@ class Publisher:
         self.routing_key = routing_key
 
         credentials = pika.PlainCredentials('admin', 'demo123')
-        
+
 
         # Conecta ao servidor RabbitMQ usando o protocolo AMQP
         #self.connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
