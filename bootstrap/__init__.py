@@ -20,27 +20,7 @@ BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'redis://localhost:6379/0')
 RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND', 'redis://localhost:6379/0')
 DATABASE_URL = os.environ.get('DATABASE_URL')
 
-
-class CeleryConfig:
-    # CELERY_IMPORTS = ('proj.tasks')
-    CELERY_RESULT_EXTENDED = True
-    CELERY_TASK_RESULT_EXPIRES = 30
-    # CELERY_ACCEPT_CONTENT = ['json', 'msgpack', 'yaml']
-    CELERY_ACCEPT_CONTENT = ['application/json']
-    CELERY_RESULT_SERIALIZER = 'json'
-    CELERY_TASK_SERIALIZER = 'json'
-    # CELERY_TASK_SERIALIZER = 'json'
-    # CELERY_RESULT_SERIALIZER = 'json'
-    # CELERY_TIMEZONE = 'Asia/Seoul'
-    CELERY_ENABLE_UTC = False
-    CELERY_RESULT_BACKEND = os.environ.get('CELERY_BACKEND', 'redis://localhost:6379/0')
-    CELERY_BROKER_URL = 'redis://localhost:6379/0'
-    REDIS_HOST = 'localhost'
-    REDIS_PASSWORD = ''
-    REDIS_PORT = 6379
-    REDIS_URL = 'redis://localhost:6379/0'
-
-
+# CONFIGURAÇÃO DE TAREFA PERIODICA NO CLERY
 CLCFG = dict(
     broker_url=BROKER_URL,
     result_backend=RESULT_BACKEND,
@@ -74,6 +54,8 @@ def celery_init_app(app: Flask) -> Celery:
     return celery_app
 
 
+
+# CREATE APP FLASK
 def create_app():
     from flask import Flask
     app = Flask(__name__, static_folder='../static', template_folder='../templates')

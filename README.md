@@ -53,6 +53,7 @@ $ python -m pip install -r requirements.txt
 flask db init
 flask db migrate -m "Initial migration."
 flask db upgrade
+flask seed run
 
 # postgres
 pip install psycopg2-binary
@@ -80,7 +81,12 @@ if __name__ == "__main__":
 ```sh
 
 
-# run
+# custom command
+$ sudo chmod +x bootstrap.sh  
+$ ./bootstrap.sh
+
+or
+# run in terminal
 $ flask run --debug
 $ uvicorn main:app --port 8100 --host '::' --proxy-headers --forwarded-allow-ips "::1"
 $ gunicorn --bind 0.0.0.0:5002 wsgi:app
@@ -94,34 +100,54 @@ $ gunicorn --bind 0.0.0.0:5002 wsgi:app
 # Worker
 # Start worker instance.
 
-$ celery --app app.celery_ap worker -l INFO
-$ celery --app app.celery_ap worker --concurrency=4
-$ celery --app app.celery_ap worker --concurrency=1000 -P eventlet
-$ celery --app worker.tasks.celery_app worker -l INFO -E
-$ celery --app worker.tasks.celery_app worker --without-heartbeat --without-gossip --without-mingle
+$ celery --app make.celery_app worker -l INFO
+$ celery --app make.celery_app worker --concurrency=4
 
-# Queue
+$ celery --app make.celery_app worker --concurrency=1000
+
+$ celery --app make.celery_app worker -l INFO -E
+
+$ celery -A worker.tasks.celery_worker worker --loglevel=INFO --concurrency=2 -E -l info
+
+$ celery --app worker.tasks.celery_worker worker --without-heartbeat 
+                                              --without-gossip 
+                                              --without-mingle
+```
+
+
+# Running the Celery Queue server
+
+```sh
 $ celery --app worker.tasks.celery_app worker -Q default --concurrency=4
 $ celery --app app.celery_app worker --loglevel=INFO -Q cache
 $ celery --app app.celery_ap worker -l INFO -Q hipri,lopri
+```
+
 
 # run monitor flower
-$ celery --app app.celery_ap flower --port=5555  -l INFO -E
+```sh
+$ celery --app make.celery_app flower --port=5555  -l INFO -E
+$ celery -A worker.tasks.celery_worker flower --port=5555
+
+
 $ celery --app worker.tasks.celery_app flower --port=5555
 $ celery --app worker.tasks.celery_app flower --port=5555 -Q default --concurrency=4
 $ celery --app worker.tasks.celery_app flower --port=5555 -Q default
 $ celery -A tasks flower --basic-auth="user1:foo,user2:bar" --port=5001
 
+```
 
-
-
-$ celery -A app.celery_app beat --loglevel=INFO
 # run celery beat for periodic tasks
+```sh
+$ celery -A make.celery_app beat --loglevel=INFO
 $ celery -A src.worker:celery beat --loglevel=INFO
-
 $ celery -A worker.tasks.celery_app beat --loglevel=INFO
 
 ```
+
+
+
+
 - https://www.youtube.com/watch?v=ig9hbt-yKkM
 
 - https://demo.bootstrapdash.com/hiro-agency-landing-page/index.html#services

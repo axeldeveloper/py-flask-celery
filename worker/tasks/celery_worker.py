@@ -3,7 +3,7 @@
 """
 Run using the command:
 
-python celery -A worker.tasks.celery_app worker --loglevel=INFO --concurrency=2 -E -l info
+python celery -A worker.tasks.celery_worker worker --loglevel=INFO --concurrency=2 -E -l info
 """
 import time
 from celery import current_app, current_task

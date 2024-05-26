@@ -3,25 +3,41 @@ FROM python:3.11-alpine
 
 # Installing packages
 RUN apk update
-RUN pip install --no-cache-dir pipenv
+#RUN pip install --no-cache-dir pipenv
 
 # Defining working directory and adding source code
 WORKDIR /usr/src/app
-COPY Pipfile Pipfile.lock bootstrap.sh ./
-COPY cashman ./cashman
+
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+#COPY start.sh bootstrap.sh ./
+#COPY start.sh ./
+
 
 # Install API dependencies
-RUN pipenv install --system --deploy
+# RUN pipenv install --system --deploy
+COPY requirements.txt .
+COPY start.sh .
+RUN pip install -r requirements.txt
+
 
 # Start app
-EXPOSE 5000
-ENTRYPOINT ["/usr/src/app/bootstrap.sh"]
+#EXPOSE 5000
+#ENTRYPOINT ["/usr/src/app/bootstrap.sh"]
 
-# build RUN the image
-#docker build -t cashman .
 
-# run a new docker container named cashman
-#docker run --name cashman -d -p 5000:5000 cashman
+# Copiar o código da aplicação
+COPY . .
+
+# Comando padrão para iniciar o Gunicorn
+# CMD ["gunicorn", "-b", "0.0.0.0:8000", "app.main:app"]
+# CMD ["gunicorn", "-b", "0.0.0.0:5000", "app:app"]
+# CMD ["flask", "run", "--host", "0.0.0.0"]
+ENTRYPOINT ["/usr/src/app/start.sh"]
+
+
 
 
 #

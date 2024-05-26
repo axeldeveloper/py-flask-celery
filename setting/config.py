@@ -75,3 +75,19 @@ class FBSetting:
         "client_x509_cert_url": os.getenv("CLIENT_X509_CERT_URL"),
         "universe_domain": os.getenv("UNIVERSE_DOMAIN"),
     }
+
+class CeleryConfig:
+    # CELERY_IMPORTS = ('proj.tasks')
+    CELERY_RESULT_EXTENDED = True
+    CELERY_TASK_RESULT_EXPIRES = 30
+    CELERY_ACCEPT_CONTENT = ['application/json', 'json']
+    CELERY_RESULT_SERIALIZER = 'json'
+    CELERY_TASK_SERIALIZER = 'json' 
+    # CELERY_TIMEZONE = 'Asia/Seoul'
+    CELERY_ENABLE_UTC = False
+    CELERY_RESULT_BACKEND = os.environ.get('CELERY_BACKEND', 'redis://localhost:6379/0')
+    CELERY_BROKER_URL = 'redis://localhost:6379/0'
+    REDIS_HOST = 'localhost'
+    REDIS_PASSWORD = ''
+    REDIS_PORT = 6379
+    REDIS_URL =  os.environ.get('REDIS_URL', 'redis://localhost:6379/0')
