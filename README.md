@@ -124,7 +124,7 @@ $ celery --app app.celery_ap worker -l INFO -Q hipri,lopri
 ```
 
 
-# run monitor flower
+# Run monitor flower
 ```sh
 $ celery --app make.celery_app flower --port=5555  -l INFO -E
 $ celery -A worker.tasks.celery_worker flower --port=5555

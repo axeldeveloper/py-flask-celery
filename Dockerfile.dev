@@ -1,0 +1,33 @@
+# Using lightweight alpine image
+FROM python:3.11-alpine
+
+# Installing packages
+RUN apk update
+#RUN pip install --no-cache-dir pipenv
+
+# Defining working directory and adding source code
+WORKDIR /usr/src/app
+
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+#COPY start.sh bootstrap.sh ./
+#COPY start.sh ./
+
+
+# Install API dependencies
+# RUN pipenv install --system --deploy
+COPY requirements.txt .
+COPY start.sh .
+# These line for /entrypoint.sh
+COPY migrate.sh .
+RUN chmod +x ./migrate.sh
+RUN pip install -r requirements.txt
+
+# Copiar o código da aplicação
+COPY . .
+
+# Comando padrão para iniciar o Gunicorn
+# comndo fica po conta do compose
+# CMD watchmedo auto-restart --directory=./ --pattern=*.py --recursive -- celery --app make.celery_app worker --concurrency=1 --loglevel=INFO -E
