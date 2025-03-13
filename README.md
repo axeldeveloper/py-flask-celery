@@ -26,6 +26,37 @@
 ```sh
 $ cd my-project
 
+# using pyvenv
+
+$ ls ~/.pyenv/versions/
+$ pyenv install 3.6.8
+$ pyenv uninstall 3.6.8
+
+$ pyenv versions
+
+$ pyenv which python
+
+$ pyenv global 3.11.8
+$ pyenv which pip
+
+
+# Creating a virtual environment is a single command:
+$ pyenv virtualenv <python_version> <environment_name>
+$ pyenv virtualenv 3.11.8 venv311
+
+# Activating Your Versions
+$ pyenv activate <environment_name>
+$ pyenv deactivat
+$ pyenv local myproject
+
+
+# Tutorial
+# https://realpython.com/intro-to-pyenv/
+
+
+
+
+# Creating Virtual Environments
 $ python -m venv venv311
 
 # window
